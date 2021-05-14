@@ -72,7 +72,7 @@ while not has_won():
     print(df)
 
     try:
-        move = int(input("Enter move: "))
+        move = int(input("Enter move " + active_user + ': '))
 
     except:
         print("This move is not possible, please try again")
@@ -83,12 +83,12 @@ while not has_won():
         all_moves.remove(move)
 
         if has_won():
-            print("Sie haben gewonnen!")
+            print("You won!")
             print(df)
             break
 
         elif not all_moves:
-            print("Unentschieden!")
+            print("Draw!")
             print(df)
             break
 
