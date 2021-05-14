@@ -1,4 +1,5 @@
 import pandas as pd
+# Guido Eßer - Ostfalia
 
 df = pd.read_csv('init.csv')
 
@@ -74,6 +75,7 @@ while not has_won():
     except:
         print("This move is not possible, please try again")
         print(all_moves)
+        move = 0
 
     if set_cell(move, piece):
         print("Move successful.")
