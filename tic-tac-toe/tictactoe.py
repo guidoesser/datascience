@@ -3,9 +3,6 @@ import os
 
 df = pd.read_csv('init.csv')
 
-def cls():
-    os.system('cls' if os.name == 'nt' else 'clear')
-
 
 def get_cell(my_move):
     if my_move == 1: return df.iloc[0][0]
@@ -17,7 +14,8 @@ def get_cell(my_move):
     if my_move == 7: return df.iloc[2][0]
     if my_move == 8: return df.iloc[2][1]
     if my_move == 9: return df.iloc[2][2]
-    else: return 'wrong'
+    else:
+        return 'wrong'
 
 
 def set_cell(my_move, my_piece):
@@ -83,13 +81,13 @@ while not has_won():
         all_moves.remove(move)
 
         if has_won():
-            print("You won!")
             print(df)
+            print("***** You won! *****")
             break
 
         elif not all_moves:
-            print("Draw!")
             print(df)
+            print("===== Draw! =====")
             break
 
         if active_user == user1:
@@ -100,28 +98,3 @@ while not has_won():
     else:
         print("This move is not possible, please try again")
         print(all_moves)
-
-
-
-
-
-    
-
-
-
-
-
-#set_cell(5, piece)
-#print(df)
-#print(get_cell(5))
-# if df.iloc[0] != dfw1.iloc[0].any(1):
-#     print("Player won!")
-
-# for row in df.to_string():
-#print(df.iloc[2])
-
-#print(df.iloc[0][1])
-#print(df.iloc[0].to_string(header=False, ))
-
-#print(df.loc[[0]])
-#print(df.to_string())
