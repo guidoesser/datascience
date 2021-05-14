@@ -17,10 +17,11 @@ def get_cell(my_move):
     if my_move == 7: return df.iloc[2][0]
     if my_move == 8: return df.iloc[2][1]
     if my_move == 9: return df.iloc[2][2]
+    else: return 'wrong'
 
 
 def set_cell(my_move, my_piece):
-    if get_cell(move) not in ('x', 'o'):
+    if get_cell(move) not in ('x', 'o', 'wrong'):
         if my_move == 1: df.iloc[0][0] = my_piece
         if my_move == 2: df.iloc[0][1] = my_piece
         if my_move == 3: df.iloc[0][2] = my_piece
@@ -88,6 +89,7 @@ while not has_won():
 
         elif not all_moves:
             print("Unentschieden!")
+            print(df)
             break
 
         if active_user == user1:
