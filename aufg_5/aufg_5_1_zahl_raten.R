@@ -23,7 +23,7 @@ try_get_number <- function()
   )
 }
 
-cat("Nummer", try_get_number())
+cat("Number", try_get_number())
 
 # real program start here
 
