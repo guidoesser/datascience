@@ -1,0 +1,214 @@
+Die Spalte "Time Event Began" hat kein einheitliches Zeitformat sowie uneindeutige Werte:
+"a.m." klein, "AM" groß, "Evening", "Midnight", "N/A", "NA" und "Ongoing" 
+
+Cleaning: 
+REPLACE "a.m." und "p.m." mit "AM" und "PM"
+REPLACE "Midnight" mit "0:00 AM"
+DELETE Zeile mit Werten in ("Evening", "N/A", "NA", "Ongoing")
+
+---
+
+In der Spalte "Time of Restoration" sind die Fehler ähnlich.
+Es gibt unterschiedliche Zeitformate für "a.m." klein und "AM" groß (genauso "p.m." und "PM")
+"NA" für not available sowie "Unknown" und "Ongoing" sind schwer auszuwerten.
+
+Cleaning: 
+REPLACE "a.m." und "p.m." mit "AM" und "PM"
+DELETE Zeile mit Werten in ("Unknown", "NA", "Ongoing")
+
+---
+
+In der Spalte "Respondent" gibt es unterschiedliche Bezeichnungen für vermutlich gleiche Firmen: z.B.
+"Associated·Electric·Coop,·Inc"
+"Associated·Electric·Cooperative,·Inc."
+
+"Entergy·Services,·Inc."
+"Entergy·Services,·Incorporated"
+
+"Progress·Energy·Carolinas,·Inc."
+"Progress·Energy,·Carolinas"
+
+Das sollte "distinct" sortiert und per REPLACE bereinigt werden. Möglicherweise gibt es einen Ähnlichkeitsalgorithmus in Trifacta.
+levenshtein-distance oder Ähnliches wäre denkbar.
+
+Solche Fehler sind zukünftig bei der Eingabe durch Vorgaben mit Dropdown-Listen zu vermeiden!
+
+---
+
+In der Spalte "Geographic Areas" gibt es ebenfalls unterschiedliche Bezeichnungen für vermutlich gleiche Gebiete: z.B.
+"Boston,·Massachusetts"
+"Boston,·Southeast·Massachusetts"
+
+"Bucks,·Chester,·Delaware,·Montgomery,·and·Philadelphia·Counties,·Pennsylvania"
+"Bucks,·Montgomery,·Delaware,·Chester,·Philadelphia·counties,·Pennsylvania"
+
+"Chicago,·Illinois"
+"Chicago,·IL"
+
+"Cincinnati,·Ohio"
+"Cincinnati,·OH"
+
+Das sollte "distinct" sortiert und per REPLACE bereinigt werden. Möglicherweise gibt es einen Ähnlichkeitsalgorithmus in Trifacta.
+levenshtein-distance oder Ähnliches wäre denkbar.
+
+Solche Fehler sind zukünftig bei der Eingabe durch Vorgaben mit Dropdown-Listen zu vermeiden!
+
+---
+
+North American Electric Reliability Corporation in der Spalte "NERC Region" gibt an, zu welchem Verbundnetz ein Eintrag gehört.
+
+Manche Einträge gehören offenbar zu mehreren Verbundnetzen:
+FRCC,·SERC"
+"NPCC,·RFC"
+"RFC,·SERC"
+Das sollte eindeutiger definiert werden. Die Spalten sind dadurch möglicherweise zur Auswertung unbrauchbar und "löshen" wäre eine Möglichkeit um die Liste zu bereinigen.
+Einige Bezeichnungen tauchen nicht unter https://de.wikipedia.org/wiki/North_American_Electric_Reliability_Corporation auf, eine Recherche auf Aktualität würde Sinn machen.
+
+---
+
+In der Spalte "Demand Loss (MW)" gibt es die Wertausprägungen 
+"-", "--", "0", "All" Cleaning: Zeilen löschen
+Zahlenwerte als Integer und Float, Cleaning: Datentyp auf Integer setzen.
+"150-200" hier sollte es zu einer bestimmten Zeit einen eindeutigen Wert geben. Cleaning: durch Mittelwert ersetzen
+"177·on·5/21/04·between·3:00·p.m.·and·5:00·p.m." Cleaning: durch 177 ersetzen, Felder sollten möglichst atomare Informationen enthalten.
+"65·to·100" Cleaning: durch Mittelwert ersetzen.
+"6/8/2014" Cleaning: Zeile löschen
+"10,000" Cleaning: Datentyp auf Integer setzen.
+"225,·159" Cleaning: durch Mittelwert ersetzen.
+"4,100·MW·(Northern·NJ)·and·400·MW,·(Erie,··PA)·area" Cleaning: Nachfragen, was das bedeutet, sonst Zeile löschen.
+"60·at·peak,·total·162" Cleaning: Nachfragen was bei anderen gemessen wird, sonst Zeile löschen.
+
+"Approx.·18,500·MW,·in·MISO·area:·First·Energy·7,500,·Detroit·Edison·9,200,·Consumers·Energy·1,800" Cleaning: Schätzwerte sind zu ungenau, Zeilen löschen, einheitliche Qualität fordern.
+"Approx.·100" Cleaning: Schätzwerte sind zu ungenau, Zeilen löschen, einheitliche Qualität fordern.
+
+---
+
+In der Spalte "Number of Customers Affected" sollten nur ganze Zahlen oder 0 stehen - es gibt keine halben Kunden. Die folgenden Werte sind vorhanden:
+"-" 
+"1·PG&E" Cleaning: Nachfragen, sonst Zeile löschen
+"1.5·million" Cleaning: Datentyp auf Integer setzen.
+"102,842·(Georgia);·12,897·(Alabama)" Cleaning: Werte addieren, Orte entfernen und Datentyp auf Integer setzen.
+"104,195·at·5:23·p.m.·11/13/03" Cleaning: Datum entfernen, Datentyp auf Integer setzen.
+"111,000·(peak)" Cleaning: Nachfragen, sonst Zeile löschen, "(peak)" bzw. alles NOT in 1-9 entfernen, Datentyp auf Integer setzen. 
+"(residential)·36,073"
+"Approx.·100,000"
+"Approx.·100,000"
+"Approx.·70,000"
+"Approx.·70,000"
+"Greater·than·250,000"
+"GRE·(1,900)·Total·11,175"
+"over·340,000"
+"Over·530,000·peak·on·9/19/03"
+"peak·320,00·9/18/03·7:00·p.m."
+"Under·50,000"
+All
+Approx.·2·million
+Approx.·940
+Interruptible·Tarriff·1-6·customers
+Major·Industrial·Customer·Load·Reduction
+N/A
+None
+PG&E
+unknown
+Undetermined
+Unknown
+UNK
+
+---
+In der Spalte "Tags" gibt es 89 disticte Ausprägungen.
+
+"equipment·failure,·public·appeal"
+"equipment·failure,·severe·weather,·storm"
+"equipment·failure,·transmission·interruption"
+"equipment·failure,·voltage·reduction"
+"equipment·failure,·wild·fire"
+"fuel·supply·emergency,·coal"
+"fuel·supply·emergency,·hydro"
+"fuel·supply·emergency,·natural·gas"
+"fuel·supply·emergency,·petroleum"
+"fuel·supply·emergency,·public·appeal"
+"fuel·supply·emergency,·public·appeal,·voltage·reduction"
+"generator·trip,·public·appeal,·load·shedding"
+"islanding,·load·shedding,·public·appeal"
+"islanding,·severe·weather"
+"load·shedding,·equipment·failure"
+"load·shedding,·generator·trip"
+"load·shedding,·islanding"
+"load·shedding,·public·appeal"
+"load·shedding,·severe·weather,·thunderstorm"
+"load·shedding,·transmission·interruption"
+"load·shedding,·voltage·reduction"
+"load·shedding,·wild·fire"
+"public·appeal,·equipment·failure"
+"public·appeal,·severe·weather,·heat"
+"severe·weather,·cold"
+"severe·weather,·cold,·public·appeal"
+"severe·weather,·cold,·wind"
+"severe·weather,·dust,·load·shedding"
+"severe·weather,·equipment·failure"
+"severe·weather,·flooding"
+"severe·weather,·flooding,·uncontrolled·loss"
+"severe·weather,·fog"
+"severe·weather,·hail"
+"severe·weather,·heat"
+"severe·weather,·heat,·public·appeal"
+"severe·weather,·hurricane/tropical·storm"
+"severe·weather,·hurricane/tropical·storm,·fuel·supply·emergency"
+"severe·weather,·hurricane/tropical·storm,·fuel·supply·emergency,·pu
+"severe·weather,·public·appeal,·voltage·reduction"
+"severe·weather,·storm"
+"severe·weather,·storm,·islanding,·load·shedding"
+"severe·weather,·thunderstorm"
+"severe·weather,·thunderstorm,·equipment·failure"
+"severe·weather,·thunderstorm,·islanding"
+"severe·weather,·thunderstorm,·transmission·interruption"
+"severe·weather,·thunderstorm,·uncontrolled·loss"
+"severe·weather,·thunderstorm,·wind"
+"severe·weather,·tornado"
+"severe·weather,·tornado,·storm"
+"severe·weather,·transmission·interruption"
+"severe·weather,·wind"
+"severe·weather,·wind,·flooding"
+"severe·weather,·wind,·rain"
+"severe·weather,·wind,·storm"
+"severe·weather,·winter·storm"
+"severe·weather,·winter·storm,·islanding"
+"severe·weather,·winter·storm,·wind"
+"transmission·interruption,·distribution·interruption"
+"transmission·interruption,·equipment·failure,·load·shedding"
+"transmission·interruption,·load·shedding"
+"vandalism,·cyber"
+"vandalism,·equipment·failure"
+"vandalism,·physical"
+"voltage·reduction,·generator·trip"
+"voltage·reduction,·load·shedding"
+"voltage·reduction,·public·appeal"
+"wild·fire,·equipment·failure"
+"wild·fire,·equipment·failure,·voltage·reduction"
+"wild·fire,·load·shedding"
+"wild·fire,·public·appeal"
+"wild·fire,·transmission·interruption"
+breaker·trip
+distribution·interruption
+earthquake
+energy·deficiency·alert
+equipment·failure
+fuel·supply·emergency
+generator·trip
+islanding
+load·shedding
+low·flying·helicopter
+public·appeal
+severe·weather
+transmission·interruption
+uncontrolled·loss
+unknown
+vandalism
+voltage·reduction
+wild·fire
+
+Dabei ist aber "equipment·failure,·public·appeal" ziemlich sicher das gleiche, wie "public·appeal,·equipment·failure". 
+Die Tags sollten in eine weitere Tabelle ausgelagert und per "Tag-Id" verbunden werden. 
+
+
+
