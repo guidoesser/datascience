@@ -10,4 +10,4 @@ cd gitprojects/apache_spark/spark-3.1.2-bin-hadoop3.2/
 ```
 ./bin/spark-submit /home/guido/gitprojects/datascience/aufg_13/spark_word_count.py > spark_word_count_log.txt
 ```
-# Most used word is **the**
+# Most used word is "the"
